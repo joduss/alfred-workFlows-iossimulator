@@ -2,7 +2,7 @@ import json
 import os
 import glob
 from shutil import rmtree
-import biplist.biplist as biplist
+import core.biplist.biplist as biplist
 
 __metadataplist = ".com.apple.mobile_container_manager.metadata.plist"
 __applicationPath = "Library/Developer/CoreSimulator/Devices/{0}/data/Containers/Bundle/Application/*/*.app"

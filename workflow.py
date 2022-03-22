@@ -1,7 +1,10 @@
-import xml.etree.ElementTree as ET
+import json
 import sys
+from json import JSONEncoder
 from os import environ
-from plistlib import readPlist, writePlist
+from typing import Any
+
+from core.biplist.biplist import readPlist, writePlist
 
 class ItemMod:
 	  Cmd, Ctrl, Alt, Shift, Fn = ('cmd', 'ctrl', 'alt', 'shift', 'fn')
@@ -16,46 +19,40 @@ class Item:
 		self.valid = valid
 		self.uid = uid
 		self.modifierSubtitles = modifierSubtitles if modifierSubtitles is not None else {}
-
-	def item_xml(self):
-		attrib = { "valid": "yes" if self.valid else "no" }
-		if self.autocomplete is not None:
-			attrib["autocomplete"] = self.autocomplete
-		if self.uid is not None:
-			attrib["uid"] = self.uid  
-		if self.arg is not None:
-			attrib["arg"] = self.arg    		
-
-		item = ET.Element('item', attrib)
-
-		title = ET.SubElement(item, "title")
-		title.text = self.title
-
-		if self.subtitle:
-			subtitle = ET.SubElement(item, "subtitle")
-			subtitle.text = self.subtitle
+		self.mods = {}
 
 		mods = (ItemMod.Cmd, ItemMod.Ctrl, ItemMod.Alt, ItemMod.Shift, ItemMod.Fn)
+
 		for mod in mods:
 			if mod in self.modifierSubtitles:
-				subtitle = ET.SubElement(item, "subtitle", { "mod": mod })
-				subtitle.text = self.modifierSubtitles[mod]
+				self.mods[mod] = ItemModEntry(valid=self.valid, subtitle=self.modifierSubtitles[mod])
 
-		if self.icon:
-			icon = ET.SubElement(item, "icon")
-			icon.text = self.icon
-
-		return item
+	def to_dict(self):
+		return json.dumps(self, default=lambda o: o.__dict__)
 
 	@staticmethod
 	def generate_output(items):
-		root = ET.Element('items')
-		for item in items:
-			root.append(item.item_xml())
-        
-		sys.stdout.write('<?xml version="1.0" encoding="utf-8"?>\n')
-		sys.stdout.write(ET.tostring(root).encode('utf-8'))
+		item_json = ItemJSONEncoder().encode({"items" : items})
+
+		sys.stdout.write(item_json)
 		sys.stdout.flush()
+
+
+class ItemModEntry:
+	def __init__(self, valid=False, arg: str or None=None, subtitle: str or None=None):
+		self.valid = valid
+		self.arg = arg
+		self.subtitle = subtitle
+
+
+class ItemJSONEncoder(JSONEncoder):
+
+	def default(self, o: Any) -> Any:
+		if isinstance(o, ItemModEntry) or isinstance(o, Item):
+			return o.__dict__
+		else:
+			return o
+
 
 def set_variable(name, value):
 	info = readPlist('info.plist')

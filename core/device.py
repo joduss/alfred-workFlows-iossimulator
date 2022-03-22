@@ -1,6 +1,6 @@
 import json
 import subprocess
-from application import number_of_applications
+from core.application import number_of_applications
 
 
 class DeviceType:

@@ -5,7 +5,7 @@
 	<key>bundleid</key>
 	<string>com.ricardosampayo.iossimulator</string>
 	<key>category</key>
-	<string>Tools</string>
+	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
 		<key>0C55BA0C-2CD4-4379-A7B3-3502E44A15EE</key>
@@ -202,10 +202,10 @@
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>102</integer>
+				<integer>98</integer>
 				<key>script</key>
 				<string>import iossimulator
-iossimulator.erase_device('{query}')</string>
+iossimulator.erase_device("{query}")</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
@@ -228,14 +228,18 @@ iossimulator.erase_device('{query}')</string>
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>import iossimulator
-iossimulator.launch_device('{query}')</string>
+				<string>python3 &lt;&lt;HEREDOC
+import iossimulator
+
+iossimulator.launch_device('{query}')
+
+HEREDOC</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>type</key>
-				<integer>3</integer>
+				<integer>5</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
@@ -271,9 +275,9 @@ iossimulator.launch_device('{query}')</string>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>argumenttreatemptyqueryasnil</key>
-				<false/>
+				<true/>
 				<key>argumenttrimmode</key>
 				<integer>0</integer>
 				<key>argumenttype</key>
@@ -293,20 +297,25 @@ iossimulator.launch_device('{query}')</string>
 				<key>runningsubtext</key>
 				<string>Searching for {query}...</string>
 				<key>script</key>
-				<string>import iossimulator
-iossimulator.devices("{query}")
+				<string>python3 &lt;&lt;HEREDOC
+import sys
+import iossimulator
 
-</string>
+if len(sys.argv) == 1:
+    iossimulator.devices()
+else:
+    iossimulator.devices(sys.argv[1])
+HEREDOC</string>
 				<key>scriptargtype</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>scriptfile</key>
-				<string></string>
+				<string>./list_devices.py</string>
 				<key>subtext</key>
 				<string>Searching for simulators</string>
 				<key>title</key>
 				<string>iOS Simulator</string>
 				<key>type</key>
-				<integer>3</integer>
+				<integer>0</integer>
 				<key>withspace</key>
 				<true/>
 			</dict>
@@ -323,16 +332,21 @@ iossimulator.devices("{query}")
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>68</integer>
+				<integer>102</integer>
 				<key>script</key>
-				<string>from iossimulator import launch_application
-launch_application("{query}")</string>
+				<string>python3 &lt;&lt;HEREDOC
+import iossimulator
+
+from iossimulator import launch_application
+launch_application('{query}')
+
+HEREDOC</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>type</key>
-				<integer>3</integer>
+				<integer>5</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
@@ -369,18 +383,22 @@ launch_application("{query}")</string>
 				<key>runningsubtext</key>
 				<string>Searching for {query}...</string>
 				<key>script</key>
-				<string>import iossimulator
-iossimulator.applications_with_device_id("{query}")</string>
+				<string>python3 &lt;&lt;HEREDOC
+import iossimulator
+
+iossimulator.applications_with_device_id('{query}')
+
+HEREDOC</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
-				<string></string>
+				<string>search_apps.py</string>
 				<key>subtext</key>
 				<string>Searching for applications</string>
 				<key>title</key>
 				<string></string>
 				<key>type</key>
-				<integer>3</integer>
+				<integer>5</integer>
 				<key>withspace</key>
 				<true/>
 			</dict>
@@ -396,6 +414,8 @@ iossimulator.applications_with_device_id("{query}")</string>
 			<dict>
 				<key>argument</key>
 				<string></string>
+				<key>passthroughargument</key>
+				<false/>
 				<key>variables</key>
 				<dict>
 					<key>deviceId</key>
@@ -415,16 +435,19 @@ iossimulator.applications_with_device_id("{query}")</string>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>68</integer>
+				<integer>102</integer>
 				<key>script</key>
-				<string>from iossimulator import bundle_path
-bundle_path("{query}")</string>
+				<string>python3 &lt;&lt;HEREDOC
+from iossimulator import bundle_path
+bundle_path("{query}")
+
+HEREDOC</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>type</key>
-				<integer>3</integer>
+				<integer>5</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
@@ -460,16 +483,21 @@ bundle_path("{query}")</string>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>68</integer>
+				<integer>102</integer>
 				<key>script</key>
-				<string>from iossimulator import uninstall_application
-uninstall_application("{query}")</string>
+				<string>python3 &lt;&lt;HEREDOC
+import sys
+from iossimulator import uninstall_application
+
+uninstall_application('{query}')
+
+HEREDOC</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>type</key>
-				<integer>3</integer>
+				<integer>5</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
@@ -484,16 +512,21 @@ uninstall_application("{query}")</string>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>68</integer>
+				<integer>102</integer>
 				<key>script</key>
-				<string>from iossimulator import reset_data_application
-reset_data_application("{query}")</string>
+				<string>python3 &lt;&lt;HEREDOC
+import sys
+from iossimulator import reset_data_application
+
+reset_data_application('{query}')
+
+HEREDOC</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>type</key>
-				<integer>3</integer>
+				<integer>5</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>

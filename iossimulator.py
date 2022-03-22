@@ -48,7 +48,11 @@ def launch_device(udid):
     deviceName = device.name if device is not None else ""
 
     devnull = open(os.devnull, 'w')  # hiding the output
-    subprocess.call(["xcrun", "instruments", "-w", udid],
+
+    # Boot headless, then shows the simulator.
+    subprocess.call(["xcrun", "simctl", "boot", udid],
+                    stdout=devnull, stderr=subprocess.STDOUT)
+    subprocess.call(["open", "-a", "Simulator"],
                     stdout=devnull, stderr=subprocess.STDOUT)
 
     if deviceName:
